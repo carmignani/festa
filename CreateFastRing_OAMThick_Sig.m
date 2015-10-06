@@ -1,4 +1,4 @@
-function [fastring,fastringrad,esrfrad,OAM,Sig]=CreateFastRing_OAMThick_Sig(ring,RFVolt,hnum,nusp,filename)
+function [fastring,fastringrad,ringrad,OAM,SigmaMat]=CreateFastRing_OAMThick_Sig(ring,RFVolt,hnum,nusp,filename)
 
 indcav=findcells(ring,'Class','RFCavity');
 cav=ring(indcav(1));
@@ -14,11 +14,11 @@ M66sympl=symplectify(M66);
 M66symplrad=symplectify(M66rad);
 fastring{indlin}.M66=M66sympl;
 fastringrad{indlinrad}.M66=M66symplrad;
-[esrfrad,RADINDEX,~,~]=atradon(ring);
-esrfrad=atsetcavity(esrfrad,RFVolt,1,hnum);
+[ringrad,RADINDEX,~,~]=atradon(ring);
+ringrad=atsetcavity(ringrad,RFVolt,1,hnum);
 OAM = OrbitAnglesMatrixThickWithSext( ring, nusp );
-envelope=ohmienvelope(esrfrad,RADINDEX,1);
-Sig=envelope.R;
-save([ filename '.mat' ],'esrfrad','fastring','fastringrad','Sig','OAM');
+envelope=ohmienvelope(ringrad,RADINDEX,1);
+SigmaMat=envelope.R;
+save([ filename '.mat' ],'ringrad','fastring','fastringrad','SigmaMat','OAM');
 end 
 

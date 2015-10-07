@@ -6,7 +6,7 @@ function [ Pol ] = TrackSpinOrb( Particles,Spin,nturns,nukick,ampkick,fastringra
 % CoordLoc=Coord;
 % SpinLoc=Spin;
 
-Kicker=atbaselem('Kicker','KickerPass','Frequency',nukick,'Amplitude',ampkick,'Phase',0);
+Kicker=atbaselem('Kicker','VerticalKickerPass','Frequency',nukick,'Amplitude',ampkick,'Phase',0);
 fastringrad=[fastringrad;Kicker];
 npart=size(Particles,2);
 ind=0;

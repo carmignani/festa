@@ -8,7 +8,7 @@ load(inputdatafile, 'partindex','outfilename');
 
 for indnukick=1:length(freq)
     disp(indnukick);
-    Pol(:,indnukick)=TrackSpinOrb_KickerPassMethod(Coord(:,partindex),Spin(:,partindex),...
+    Pol(:,indnukick)=TrackSpinOrb(Coord(:,partindex),Spin(:,partindex),...
         nturns,freq(indnukick),kickampl,fastring,OAM,nusp);
 end
 

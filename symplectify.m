@@ -12,4 +12,3 @@ V=J*(eye(6)-M)*inv(eye(6)+M);
 W=(V+V')/2;
 %Now reconstruct M from VS
 MS=(eye(6)+J*W)*inv(eye(6)-J*W);
-

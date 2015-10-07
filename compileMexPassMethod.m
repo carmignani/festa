@@ -1,0 +1,1 @@
+mex -DGLNXA64 -largeArrayDims  LDFLAGS='-pthread -shared -Wl,--version-script,/users/carmigna/ESRF/atcollab-code-0/atintegrators/mexFunctionGLNX86.map -Wl,--no-undefined' -outdir . ./VerticalKickerPass.c

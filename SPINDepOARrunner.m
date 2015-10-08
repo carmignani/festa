@@ -7,7 +7,7 @@ load('inputGeneralfile.mat','fastring','OAM','nusp','freq','Coord','Spin','kicka
 load(inputdatafile, 'partindex','outfilename');
 
 for indnukick=1:length(freq)
-    disp(indnukick);
+%     disp(indnukick);
     Pol(:,indnukick)=TrackSpinOrb(Coord(:,partindex),Spin(:,partindex),...
         nturns,freq(indnukick),kickampl,fastring,OAM,nusp);
 end

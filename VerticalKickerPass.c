@@ -23,15 +23,21 @@ void KickerPass(double *r_in, double ampl, double freq, double phase, int num_pa
  *this is a problem for very high frequency kickers
 */
 {	
-  	double turn;
+  	static int turn=0;
   	double kick;
   	int c, c6;
-  	turn=getTurnFromMatlab(); /* this function is in elempass.h */
+    turn++;
+  	/*turn=getTurnFromMatlab(); /* this function is in elempass.h */
+    /*printf("turn=%f\n",turn);*/
   	for(c = 0;c<num_particles;c++)
     {
       	c6 = c*6;
       	if(!mxIsNaN(r_in[c6]))
+        {
 			r_in[c6+3] += ampl*cos(TWOPI*freq*turn+phase);
+            /*printf("kick=%f\n",ampl*cos(TWOPI*freq*turn+phase));*/
+            /*printf("ampl=%f,\nfreq=%f,\nturn=%f,\nphase=%f\n",ampl,freq,turn,phase);*/
+        }
     }
 }
 
@@ -98,7 +104,7 @@ ExportMode int* passFunction(const mxArray *ElemData,int *FieldNumbers,
       {	mexErrMsgTxt("No match found for calling mode in function KickerPass\n");
       }
     }
-  KickerPass(r_in, freq, ampl, phase, num_particles);
+  KickerPass(r_in, ampl, freq, phase, num_particles);
   return(returnptr);
 }
 
@@ -141,7 +147,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
       
       plhs[0] = mxDuplicateArray(prhs[1]);
       r_in = mxGetPr(plhs[0]);
-      KickerPass(r_in, freq, ampl, phase, n);
+      KickerPass(r_in, ampl, freq, phase, n);
     }
   else
     {   /* return list of required fields */

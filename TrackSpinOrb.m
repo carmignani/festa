@@ -1,12 +1,17 @@
-function [ Pol ] = TrackSpinOrb( Particles,Spin,nturns,nukick,ampkick,fastringrad,OAM,nusp )
+function [ Pol_x, Pol_y, Pol_z ] = ...
+    TrackSpinOrb( Particles,Spin,nturns,nukick,ampkick,fastringrad,OAM,nusp )
 %
-%   [ Pol ] = TrackSpinOrb( Coord,Spin,nturns,nukick,ampkick,fastringrad,OAM,nusp )
+%   [ Pol_x, Pol_y, Pol_z ] = ...
+%       TrackSpinOrb( Coord,Spin,nturns,nukick,ampkick,fastringrad,OAM,nusp )
 %
+%       This function performs the spin and orbit tracking of many
+%       particles for many turns and returns the polarization vector every
+%       nturns/1000 
 %
-% CoordLoc=Coord;
-% SpinLoc=Spin;
+%   see also: SpinRotMatrix, kicker_onlyspin, atfastring
 
-Kicker=atbaselem('Kicker','VerticalKickerPass','Frequency',nukick,'Amplitude',ampkick,'Phase',0);
+Kicker=atbaselem('Kicker','VerticalKickerPass','Frequency',nukick,...
+    'Amplitude',ampkick,'Phase',0);
 fastringrad=[fastringrad;Kicker];
 npart=size(Particles,2);
 ind=0;
@@ -17,10 +22,13 @@ for turn=1:nturns
         Spin(:,part)=SpinRot*Spin(:,part);
      
         [Spin(:,part) ]=...
-            kicker_onlyspin(Particles(:,(turn-1)*npart+part),Spin(:,part),turn,nukick,ampkick,nusp);
+            kicker_onlyspin(Particles(:,(turn-1)*npart+part),...
+            Spin(:,part),turn,nukick,ampkick,nusp);
      end
      if(mod(turn-1,ceil(nturns/1000))==0);
         ind=ind+1;
-        Pol(ind)=mean(Spin(2,:));
+        Pol_x(ind)=mean(Spin(1,:));
+        Pol_y(ind)=mean(Spin(2,:));
+        Pol_z(ind)=mean(Spin(3,:));
      end
 end

@@ -5,7 +5,7 @@ function PlotDep( datafolder, string, export )
 load([datafolder '/Results.mat']);
 
 figure;
-plot(nturns*(1:1000)/1000,AllPol)
+plot(nturns*(1:1000)/1000,AllPol_y)
 grid on
 xlabel('n turns');
 ylabel('average vertical polarization');
@@ -17,7 +17,7 @@ end
 nfreq=length(freq);
 FinPol=zeros(nfreq,1);
 for i=1:nfreq
-    FinPol(i)=mean(AllPol(900:1000,i));
+    FinPol(i)=mean(AllPol_y(900:1000,i));
 end
 
 figure;

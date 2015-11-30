@@ -38,11 +38,11 @@ for jj=1:6
             thetaBend=ring{indBendQuad(i)}.BendingAngle;
 %             delta0=ROUT0(5,i);
 %             delta1=ROUT1(5,i);
-            thetaSpin0=nusp*thetaBend;%*(1+delta0)
+            thetaSpin0=(nusp)*thetaBend;%*(1+delta0)
             elemSpinMat0=[cos(thetaSpin0),0, -sin(thetaSpin0) ;...
                 0,             1,  0;...
                 sin(thetaSpin0),0,  cos(thetaSpin0)];
-            thetaSpin1=nusp*thetaBend;%*(1+delta1)
+            thetaSpin1=(nusp)*thetaBend;%*(1+delta1)
             elemSpinMat1=[cos(thetaSpin1),0, -sin(thetaSpin1) ;...
                 0,             1,  0;...
                 sin(thetaSpin1),0,  cos(thetaSpin1)];
@@ -72,7 +72,7 @@ for jj=1:6
             
             if thetaQuad0~=0
                 u=[-dyp0,dxp0,0]/thetaQuad0;
-                theta=thetaQuad0*nusp*(1+delta0);
+                theta=thetaQuad0*(nusp)*(1+delta0);
                 ct=cos(theta);
                 st=sin(theta);
                 %formula from rotation matrix wikipedia
@@ -85,7 +85,7 @@ for jj=1:6
             end
             if thetaQuad1~=0
                 u=[-dyp1,dxp1,0]/thetaQuad1;
-                theta=thetaQuad1*nusp*(1+delta1);
+                theta=thetaQuad1*(nusp)*(1+delta1);
                 ct=cos(theta);
                 st=sin(theta);
                 %formula from rotation matrix wikipedia
@@ -110,13 +110,9 @@ for jj=1:6
 end
 OAM=[thetax;thetay;thetaz]/eps;
 
-
 % S1=[1;0;0]; S2=[0;1;0];
 %
 % R1*S1-R0*S1
 % R1*S2-R0*S2
 
-
-
 end
-

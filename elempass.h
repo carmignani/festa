@@ -24,10 +24,19 @@
 /* Default - Windows */
 #define ExportMode __declspec(dllexport)
 #endif
-	
+
+struct parameters
+{
+	int mode;
+	int nturn;
+	double RingLength;
+	double T0;
+};
+
 ExportMode int* passFunction(const mxArray *ElemData, int *FieldNumbers,
 				double *r_in, int num_particles, int mode);
-
+ExportMode int* trackFunction(const mxArray *ElemData, int *FieldNumbers,
+				double *r_in, int num_particles, struct parameters *Param);
 
 #define NO_LOCAL_COPY 		0	/* function retieves element data from MATLAB workspace
 								   each time it is called and reterns NULL pointer
@@ -43,39 +52,4 @@ ExportMode int* passFunction(const mxArray *ElemData, int *FieldNumbers,
 
 #endif
 
-void getT0andTurnFromMatlab(double *T0, double *nturn)
-/*
- *	This function gets the values of T0 and Turn number created in ringpass 
- *	or linepass and stored in the matlab global variables T0 and xturn.
- */
-{
-	mxArray *mxT0, *mxnturn;
-	mxT0 = mexGetVariable("global", "T0");
-	mxnturn = mexGetVariable("global", "xturn");
-/*	printf("mxturn = %p \n", mxnturn);*/
-	if(mxT0!=NULL)
-		*T0=mxGetScalar(mxT0);
-	else
-		*T0=0.0;
-	if(mxnturn!=NULL)
-		*nturn=mxGetScalar(mxnturn);
-	else
-		*nturn=0.0;
-}
-
-double getTurnFromMatlab()
-/*
- *	This function gets the turn number stored in the matlab global variable xturn
- *
- */
-{
-	double nturn;
-	mxArray *mxnturn;
-	mxnturn = mexGetVariable("global", "xturn");
-	if(mxnturn!=NULL)
-		nturn=mxGetScalar(mxnturn);
-	else
-		nturn=0.0;
-	return nturn;
-}
 

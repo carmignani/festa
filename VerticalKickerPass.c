@@ -13,7 +13,7 @@
 #define C0  	2.99792458e8 
 
 
-void KickerPass(double *r_in, double ampl, double freq, double phase, int num_particles)
+void VerticalKickerPass(double *r_in, double ampl, double freq, double phase, int nturn, int num_particles)
 /* amp - amplitude of vertical kick in rad
    freq - frequency in units of revolution freq
    r is a 6-by-N matrix of initial conditions reshaped into 
@@ -23,89 +23,76 @@ void KickerPass(double *r_in, double ampl, double freq, double phase, int num_pa
  *this is a problem for very high frequency kickers
 */
 {	
-  	static int turn=0;
   	double kick;
   	int c, c6;
-    turn++;
+    
   	/*turn=getTurnFromMatlab(); /* this function is in elempass.h */
-    /*printf("turn=%f\n",turn);*/
+/*    printf("turn=%d;\n",nturn); */
   	for(c = 0;c<num_particles;c++)
     {
       	c6 = c*6;
       	if(!mxIsNaN(r_in[c6]))
         {
-			r_in[c6+3] += ampl*cos(TWOPI*freq*turn+phase);
-            /*printf("kick=%f\n",ampl*cos(TWOPI*freq*turn+phase));*/
-            /*printf("ampl=%f,\nfreq=%f,\nturn=%f,\nphase=%f\n",ampl,freq,turn,phase);*/
+			r_in[c6+3] += ampl*cos(TWOPI*freq*(double)nturn+phase);
+            /*printf("turn %06d; kick %06f;\n",nturn,ampl*cos(TWOPI*freq*(double)nturn+phase));*/
         }
     }
 }
 
 #ifndef NOMEX
+#include "mxutils.c"
 
-ExportMode int* passFunction(const mxArray *ElemData,int *FieldNumbers,
-			     double *r_in, int num_particles, int mode)
+
+ExportMode int* trackFunction(const mxArray *ElemData,int *FieldNumbers,
+				double *r_in, int num_particles,struct parameters *Param)
 #define NUM_FIELDS_2_REMEMBER 5  
 {
   double ampl, freq, phase;
   int *returnptr;
   int *NewFieldNumbers, fnum;
-  switch(mode)
-    {	
-    case NO_LOCAL_COPY:	/* Obsolete in AT1.3  */
-      {
-	
-      }	break;
-      
-    case MAKE_LOCAL_COPY: 	/* Find field numbers first 
-				   Save a list of field number in an array
-				   and make returnptr point to that array
-				*/
-      {	
-	NewFieldNumbers = (int*)mxCalloc(NUM_FIELDS_2_REMEMBER,sizeof(int));
-	
-	fnum = mxGetFieldNumber(ElemData,"Frequency");
-	if(fnum<0) 
-	  mexErrMsgTxt("Required field 'Frequency' was not found in the element data structure"); 
-	NewFieldNumbers[0] = fnum;
-	
-	fnum = mxGetFieldNumber(ElemData,"Amplitude");
-	if(fnum<0) 
-	  mexErrMsgTxt("Required field 'Amplitude' was not found in the element data structure"); 
-	NewFieldNumbers[1] = fnum;
-	
-	fnum = mxGetFieldNumber(ElemData,"Phase");
-	if(fnum<0) 
-	  mexErrMsgTxt("Required field 'Phase' was not found in the element data structure"); 
-	NewFieldNumbers[2] = fnum;
-	
-	freq = mxGetScalar(mxGetFieldByNumber(ElemData,0,NewFieldNumbers[0]));
-	ampl = mxGetScalar(mxGetFieldByNumber(ElemData,0,NewFieldNumbers[1]));
-	phase = mxGetScalar(mxGetFieldByNumber(ElemData,0,NewFieldNumbers[2]));
-	
-	returnptr = NewFieldNumbers;
-      }	break;
-      
-    case	USE_LOCAL_COPY:	/* Get fields from MATLAB using field numbers
-				   The second argument ponter to the array of field 
-				   numbers is previously created with 
-				   QuadLinPass( ..., MAKE_LOCAL_COPY)
-				*/
-      
-      {	
-	freq = mxGetScalar(mxGetFieldByNumber(ElemData,0,FieldNumbers[0]));
-	ampl = mxGetScalar(mxGetFieldByNumber(ElemData,0,FieldNumbers[1]));
-	phase = mxGetScalar(mxGetFieldByNumber(ElemData,0,FieldNumbers[2]));
-	
-	returnptr = FieldNumbers;
-      }	break;
-      
-    default:
-      {	mexErrMsgTxt("No match found for calling mode in function KickerPass\n");
-      }
-    }
-  KickerPass(r_in, ampl, freq, phase, num_particles);
-  return(returnptr);
+	int nturn;
+	nturn=Param->nturn;
+
+	/*printf("turn=%d\nT0=%f\nRingLength=%f\n~~~~~\n",Param->nturn,Param->T0,Param->RingLength);*/
+	switch(Param->mode)
+		{	
+		case NO_LOCAL_COPY:	/* Obsolete in AT1.3 */
+			{	
+			}	break;	
+		case MAKE_LOCAL_COPY:	/* Find field numbers first
+                               	 Save a list of field number in an array
+                               	 and make returnptr point to that array
+                               	 */
+			/* Allocate memory for integer array of
+	         field numbers for faster futurereference
+	         */
+			FieldNumbers = (int *) mxCalloc(NUM_FIELDS_2_REMEMBER, sizeof(int));
+			/*  Populate */
+            FieldNumbers[0] = GetRequiredFieldNumber(ElemData, "Frequency");
+            FieldNumbers[1] = GetRequiredFieldNumber(ElemData, "Amplitude");
+            FieldNumbers[2] = GetRequiredFieldNumber(ElemData, "Phase");
+            
+            /* Fall through next section... */
+		case	USE_LOCAL_COPY:	/* Get fields from MATLAB using field numbers
+                                 The second argument pointer to the array of field
+                                 numbers is previously created with
+                                 RFCavityPass(..., MAKE_LOCAL_COPY)
+                                 */
+			freq = mxGetScalar(mxGetFieldByNumber(ElemData,0,FieldNumbers[0]));
+			ampl = mxGetScalar(mxGetFieldByNumber(ElemData,0,FieldNumbers[1]));
+			
+			/* Optional field TimeLag */
+			if(FieldNumbers[5]<0) 
+			    phase = 0;
+			else
+				phase = mxGetScalar(mxGetFieldByNumber(ElemData,0,FieldNumbers[2]));
+			break;
+
+		default:
+			mexErrMsgTxt("No match found for calling mode in function RFCavityPass\n");
+	}
+	VerticalKickerPass(r_in, ampl, freq, phase, nturn, num_particles);
+	return FieldNumbers;
 }
 
 
@@ -147,7 +134,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
       
       plhs[0] = mxDuplicateArray(prhs[1]);
       r_in = mxGetPr(plhs[0]);
-      KickerPass(r_in, ampl, freq, phase, n);
+      VerticalKickerPass(r_in, ampl, freq, phase, 0, n);
     }
   else
     {   /* return list of required fields */
@@ -158,7 +145,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
       if(nlhs>1) /* optional fields */ 
 	{   
 	  plhs[1] = mxCreateCellMatrix(1,1); 
-	  mxSetCell(plhs[1],0,mxCreateString("TimeLag"));
+	  mxSetCell(plhs[1],0,0);
 	}
     }
   

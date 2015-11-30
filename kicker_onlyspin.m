@@ -14,7 +14,7 @@ function [ Spin1 ] = kicker_onlyspin( Coord,Spin,turn,nukick,Ampl,nusp )
 thetaOrb=Ampl*cos(2*pi*nukick*(turn));    %Coord(6) effect to be added
 % Coord1=Coord;
 % Coord1(4)=Coord1(4)+thetaOrb;
-thetasp=nusp*(1+Coord(5))*thetaOrb;  % 
+thetasp=(nusp+1)*(1+Coord(5))*thetaOrb;  % 
 rotspin=[1,0,0;...
          0,cos(thetasp),-sin(thetasp);...
          0,sin(thetasp),cos(thetasp)];

@@ -83,7 +83,7 @@ for indproc=1:nproc %
     
     % prepare OAR script to run TolErrorSetEvaluatorOARrunner
     % put here the matlab version you are using
-    script=[' /opt/matlab_2013a ' fullfile(pwd,spfn) '\n']; 
+    script=[' /sware/com/matlab_2015b ' fullfile(pwd,spfn) '\n']; 
     
     %fopen(fullfile(workdir,'params.txt'),'w+')
     fprintf(pfile,script');

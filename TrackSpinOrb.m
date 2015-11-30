@@ -1,4 +1,4 @@
-function [ Pol_x, Pol_y, Pol_z ] = ...
+function [ Pol_x, Pol_y, Pol_z, Coord_temp, Spin_temp ] = ...
     TrackSpinOrb( Particles,Spin,nturns,nukick,ampkick,fastringrad,OAM,nusp )
 %
 %   [ Pol_x, Pol_y, Pol_z ] = ...
@@ -32,3 +32,5 @@ for turn=1:nturns
         Pol_z(ind)=mean(Spin(3,:));
      end
 end
+Coord_temp=Particles(:,end-npart+1:end);
+Spin_temp=Spin;

@@ -1,4 +1,4 @@
-function OAM = OrbitAnglesMatrixThickWithSext_nuspp1( ring, nusp )
+function OAM = OrbitAnglesMatrixThickWithSext_nuspp1_nspE( ring, nusp )
 %   OAM = OrbitAnglesMatrix( ring, nusp )
 %   This function computes the OarbitAnglesMatrix in the initial position
 %   of ring. 
@@ -11,6 +11,13 @@ function OAM = OrbitAnglesMatrixThickWithSext_nuspp1( ring, nusp )
 %   [thetax;thetay;thetaz]=OAM*[x;xp;y;yp;delta;s]
 %
 %   See also SpinRotMatrix.m
+
+%get energy to compute spin tune
+%E0=2.978715e9;
+E0=atenergy(ring);
+gamma=E0/510998.93;
+a=0.00115965218;
+nusp=a*gamma;
 
 nelem=length(ring);
 

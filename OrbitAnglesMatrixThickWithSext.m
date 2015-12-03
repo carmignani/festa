@@ -40,7 +40,6 @@ for jj=1:6
     ROUT1=linepass(ring,Rin(:,jj),indBendQuad);
     for i=1:length(indBendQuad)
         if strcmp(ring{indBendQuad(i)}.Class,'Bend')
-<<<<<<< HEAD
             Z0=linepass(ring(indBendQuad(i)),ROUT0(:,i));
             Z1=linepass(ring(indBendQuad(i)),ROUT1(:,i));
             delta0=ROUT0(5,i);
@@ -59,16 +58,6 @@ for jj=1:6
                 sin(thetaSpin0),0,  cos(thetaSpin0)];
             thetaSpin1=(nusp*(1+delta1)+1)*thetaBend1;
             
-=======
-            thetaBend=ring{indBendQuad(i)}.BendingAngle;
-%             delta0=ROUT0(5,i);
-%             delta1=ROUT1(5,i);
-            thetaSpin0=(nusp)*thetaBend;%*(1+delta0)
-            elemSpinMat0=[cos(thetaSpin0),0, -sin(thetaSpin0) ;...
-                0,             1,  0;...
-                sin(thetaSpin0),0,  cos(thetaSpin0)];
-            thetaSpin1=(nusp)*thetaBend;%*(1+delta1)
->>>>>>> 80c6d0ebe7cc8f9efc85529cebdcafbece9a197b
             elemSpinMat1=[cos(thetaSpin1),0, -sin(thetaSpin1) ;...
                 0,             1,  0;...
                 sin(thetaSpin1),0,  cos(thetaSpin1)];
@@ -91,17 +80,13 @@ for jj=1:6
             dpx1=dZ1(2);
             dpy1=dZ1(4);
          
-            thetaQuad0=sqrt(dxp0^2+dyp0^2)/(1+delta0);%remember that px=x'*(1+delta)
-            thetaQuad1=sqrt(dxp1^2+dyp1^2)/(1+delta1);
+            thetaQuad0=sqrt(dpx0^2+dpy0^2)/(1+delta0);%remember that px=x'*(1+delta)
+            thetaQuad1=sqrt(dpx1^2+dpy1^2)/(1+delta1);
             thetatot0=thetatot0+thetaQuad0;
             thetatot1=thetatot1+thetaQuad1;
             if thetaQuad0~=0
-                u=[-dyp0,dxp0,0]/thetaQuad0;
-<<<<<<< HEAD
+                u=[-dpy0,dpx0,0]/thetaQuad0;
                 theta=thetaQuad0*(nusp*(1+delta0)+1);
-=======
-                theta=thetaQuad0*(nusp)*(1+delta0);
->>>>>>> 80c6d0ebe7cc8f9efc85529cebdcafbece9a197b
                 ct=cos(theta);
                 st=sin(theta);
                 %formula from rotation matrix wikipedia
@@ -113,12 +98,8 @@ for jj=1:6
                 elemSpinMat0=eye(3);
             end
             if thetaQuad1~=0
-                u=[-dyp1,dxp1,0]/thetaQuad1;
-<<<<<<< HEAD
+                u=[-dpy1,dpx1,0]/thetaQuad1;
                 theta=thetaQuad1*(nusp*(1+delta1)+1);
-=======
-                theta=thetaQuad1*(nusp)*(1+delta1);
->>>>>>> 80c6d0ebe7cc8f9efc85529cebdcafbece9a197b
                 ct=cos(theta);
                 st=sin(theta);
                 %formula from rotation matrix wikipedia

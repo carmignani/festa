@@ -1,4 +1,6 @@
 
 % addpath('..');
 
-mcc('-vm','SPINDepOARrunner.m','PassMethodList.m'); exit;
+mcc('-vm','SPINDepOARrunner.m','PassMethodList.m'); 
+
+exit;

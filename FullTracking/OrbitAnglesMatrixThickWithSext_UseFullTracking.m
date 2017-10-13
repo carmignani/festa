@@ -14,7 +14,7 @@ function OAM = OrbitAnglesMatrixThickWithSext_UseFullTracking(...
 %   See also SpinRotMatrix.m
 
 % nelem=length(ring);
-clorb=findorbit6(ring,1)
+clorb=findorbit6(ring,1);
 indBendQuad=findcells(ring,'Class','Bend','Quadrupole','Sextupole');
 %indBendQuad=findcells(ring,'Class','Bend','Quadrupole');
 maskbend=atgetcells(ring(indBendQuad),'Class','Bend');

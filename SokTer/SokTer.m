@@ -17,10 +17,13 @@ switch method
         methodnum=2;
     case 'boaz'
         methodnum=3;
+    case 'boaznoise'
+        methodnum=4;
 end
 SpinRotAngle=nusp*2*pi;
-for nt=1:nturns
-    for np=1:length(Spins(1,:))
+for nt=1:nturns     %loop on turns
+    for np=1:length(Spins(1,:))     %loop on particles
+        %spin tune rotation
         Spins(2,np)=mod(Spins(2,np)+SpinRotAngle,6.283185307179586);
         switch methodnum
             case 1
@@ -42,6 +45,12 @@ for nt=1:nturns
                         Spins(1,np)=0;  % go to south pole
                     end
                 end
+            case 4
+                Prob=ProbFlip(Spins(:,np),PolTime);
+                xi=2*sqrt(Prob);
+                phi=rand*6.283185307179586;
+                Spins(2,np)=Spins(2,np)+xi*cos(phi)/sin(Spins(1,np));
+                Spins(1,np)=Spins(1,np)+xi*sin(phi);
         end
     end
     if NoiseAmpRad>0

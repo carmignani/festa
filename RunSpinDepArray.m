@@ -92,7 +92,7 @@ end% END LOOP processes
 %
 routinetorun=[pathtoroutine '/run_' routine '.sh' ];
 addlabel=DirectoryLabel;
-label=[ 'sp_' addlabel]; % label for files.
+label=[ 's_' addlabel]; % label for files.
 oarcmd=['oarsub -n ' label ' ' oarspecstring ' --array-param-file ./params.txt ' routinetorun];
 fprintf(fopen(['RunOAR_Script_' routine '_' label '.sh'],'w+'),oarcmd');
 system(['chmod u+x RunOAR_Script_' routine '_' label '.sh']);

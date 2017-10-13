@@ -21,7 +21,8 @@ for i=1:nfreq
 end
 
 figure;
-plot(freq-(freq(ceil(nfreq/2))),FinPol,'*-');
+% plot(freq-(freq(ceil(nfreq/2))),FinPol,'*-');
+plot(freq,FinPol,'*-');
 grid on;
 xlabel('nu kicker - nu centre');
 ylabel('Final polarization');

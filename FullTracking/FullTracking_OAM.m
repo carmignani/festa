@@ -1,9 +1,11 @@
-clear all; close all;
+clear; close all;
 addpath('/mntdirect/_users/carmigna/ESRF/SPIN/festa/')
 % load('../esrf.mat');
 
 % ring=esrf;
 ring=getESRF1;
+save('esrf.mat','ring');
+load('esrf.mat');
 
 RFVolt=9e6;
 hnum=992;

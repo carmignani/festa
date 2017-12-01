@@ -1,10 +1,10 @@
-function SPINDepOARrunner(inputdatafile)
+function SPINDepOARrunner(generalinputfile, specinputfile)
 %   SPINDepOARrunner(inputdatafile)
 %   Detailed explanation goes here
 
-load('inputGeneralfile.mat','fastring','OAM','nusp','freq','Coord','Spin','kickampl','nturns');
+load(generalinputfile,'fastring','OAM','nusp','freq','Coord','Spin','kickampl','nturns');
 
-load(inputdatafile, 'partindex','outfilename');
+load(specinputfile, 'partindex','outfilename');
 Coord_temp=Coord(:,partindex);
 Spin_temp=Spin(:,partindex);
 for indnukick=1:length(freq)

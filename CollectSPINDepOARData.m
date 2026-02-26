@@ -52,11 +52,10 @@ AllPol_y=AllPol_y/nPartTot;
 AllPol_z=AllPol_z/nPartTot;
 
 save('Results.mat','freq','AllPol_x','AllPol_y','AllPol_z','nturns');
-system('rm *.stderr');
-system('rm *.stdout');
+system('rm *.out');
 system('rm outfile*');
 system('rm specfile*');
 
 cd ..
 
-PlotDep(datafolder, string, export)
+% PlotDep(datafolder, string, export)

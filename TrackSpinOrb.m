@@ -1,5 +1,5 @@
 function [ Pol_x, Pol_y, Pol_z, Coord_temp, Spin_temp ] = ...
-    TrackSpinOrb( Particles,Spin,nturns,nukick,ampkick,fastringrad,OAM,nusp )
+    TrackSpinOrb( Particles,Spin,partindex,nturns,nukick,ampkick,fastringrad,OAM,nusp )
 %
 %   [ Pol_x, Pol_y, Pol_z ] = ...
 %       TrackSpinOrb( Coord,Spin,nturns,nukick,ampkick,fastringrad,OAM,nusp )
@@ -16,7 +16,7 @@ Kicker=atbaselem('Kicker','ACDipolePass','freqy',nukick,...
 fastringrad=[fastringrad;Kicker];
 npart=size(Particles,2);
 ind=0;
-Particles=ringpass(fastringrad,Particles,nturns);
+Particles=ringpass(fastringrad,Particles,nturns,'seed',partindex(1));
 for turn=1:nturns
      for part=1:npart
         SpinRot=SpinRotMatrix( Particles(:,(turn-1)*npart+part),OAM,nusp );
@@ -26,7 +26,7 @@ for turn=1:nturns
             kicker_onlyspin(Particles(:,(turn-1)*npart+part),...
             Spin(:,part),turn,nukick,ampkick,nusp);
      end
-     if(mod(turn-1,ceil(nturns/1000))==0);
+     if(mod(turn-1,ceil(nturns/1000))==0)
         ind=ind+1;
         Pol_x(ind)=mean(Spin(1,:));
         Pol_y(ind)=mean(Spin(2,:));

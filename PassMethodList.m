@@ -2,6 +2,7 @@ function PassMethodList()
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
 
+ACDipolePass
 AperturePass
 BendLinearPass
 BndMPoleSymplectic4E2Pass
